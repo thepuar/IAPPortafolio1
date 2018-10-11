@@ -50,7 +50,7 @@ public class ConHTTP {
         String inputLine;
         StringBuffer response = new StringBuffer();
         try {
-            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(),"UTF-8"));
             while ((inputLine = in.readLine()) != null) {
                 response.append(inputLine);
             }
