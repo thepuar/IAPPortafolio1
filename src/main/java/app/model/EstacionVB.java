@@ -10,7 +10,7 @@ package app.model;
  * @author thepu
  */
 public class EstacionVB {
-    String punto, tipo, latitud, longitud, descripcion, numbicis, numvacios;
+    String punto, tipo, latitud, longitud, descripcion, numbicis, numvacios, coordenadas;
     
     public EstacionVB(){
         this.tipo = "Estaciones ValenBisi";
@@ -49,6 +49,7 @@ public class EstacionVB {
     }
 
     public String getDescripcion() {
+        this.setDescripcion(descripcion);
         return descripcion;
     }
 
@@ -70,6 +71,16 @@ public class EstacionVB {
 
     public void setNumvacios(String numvacios) {
         this.numvacios = numvacios;
+    }
+    
+    public void setCoordenadas(String coor){
+        int poscoma = coor.indexOf(",");
+        this.setLatitud(coor.substring(0, poscoma).trim());
+        this.setLongitud(coor.substring(poscoma+1).trim());
+    }
+    
+    public String toString(){
+        return "Punto: "+this.getPunto()+" Tipo: "+this.getTipo()+" Latitud: "+this.getLatitud()+" Longitud: "+this.getLongitud()+" Descripcion: "+this.getDescripcion();
     }
     
     
