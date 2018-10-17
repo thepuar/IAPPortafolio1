@@ -7,20 +7,27 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Node;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class XMLtoJSON {
+
+    JSONObject raiz;
 
     public XMLtoJSON(String cadena) {
 
         Document document;
-        String spunto,scoordenadas,sbicis,svacio,slatitud,slongitud;
+        String spunto, scoordenadas, sbicis, svacio, slatitud, slongitud;
+        this.raiz = new JSONObject();
         try {
             document = DocumentHelper.parseText(cadena);
 
             List<Node> estaciones = document.selectNodes("//*[local-name() = 'Placemark']");
             List<EstacionVB> lestaciones = new ArrayList<>();
             EstacionVB estacion;
-            for(Node elnodo : estaciones){
+
+            for (Node elnodo : estaciones) {
+
                 estacion = new EstacionVB();
                 //Dirección - punto
                 Node ndireccion = elnodo.selectSingleNode(".//*[@name='address']");
@@ -39,14 +46,29 @@ public class XMLtoJSON {
                 estacion.setNumvacios(svacio);
                 lestaciones.add(estacion);
             }
-            for(EstacionVB laestacion  : lestaciones){
-                System.out.println(laestacion);
+            //Construyendo el JSON
+            JSONObject jestacion;
+            JSONArray jestaciones = new JSONArray();
+            for (EstacionVB laestacion : lestaciones) {
+                jestacion = new JSONObject();
+                jestacion.put("punto",laestacion.getPunto()); 
+                jestacion.put("tipo", laestacion.getTipo());
+                jestacion.put("latitud",laestacion.getLatitud());
+                jestacion.put("longitud",laestacion.getLongitud());
+                jestacion.put("descripcion", laestacion.getDescripcion());
+                jestaciones.put(jestacion);
             }
-            
-           
-            System.out.println("");
+            this.raiz.put("estaciones", jestaciones);
+
+//            for(EstacionVB laestacion  : lestaciones){
+//                System.out.println(laestacion);
+//            }
         } catch (DocumentException de) {
         }
+    }
+
+    public String getJSON() {
+        return this.raiz.toString();
     }
 
 }

@@ -22,11 +22,13 @@ import app.model.*;
 public class JSONtoJSON {
 
     enum ESTADO {
-        FLUID, DENS, CONGESTIONAT, TALLAT,;
+        FLUID, DENS, CONGESTIONAT, TALLAT;
     }
 
     JSONObject job;
+    JSONObject raiz;
     List<String> lsjson;
+    String sjson;
 
     public JSONtoJSON(String cadena) {
         List<Trafico> listatrafico = new ArrayList<>();
@@ -60,7 +62,9 @@ public class JSONtoJSON {
             
             
         }
+        this.raiz = new JSONObject();
         JSONObject jcalle;
+        JSONArray jcalles = new JSONArray();
         lsjson = new ArrayList<>();
         for(Trafico lacalle: listatrafico){
             jcalle = new JSONObject();
@@ -70,11 +74,18 @@ public class JSONtoJSON {
             jcalle.put("longitud", lacalle.getLongitud());
             jcalle.put("descripcion", lacalle.getDescripcion());
             lsjson.add(jcalle.toString());
+            jcalles.put(jcalle);
         }
+        raiz.put("calles", jcalles);
+        
        
     }
+ 
     
-    public List<String> getJson(){return this.lsjson;}
+    public String getJSON(){
+       
+        return this.raiz.toString();
+    }
 
     public String traEstado(int value) {
         String cadena = "";
